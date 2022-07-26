@@ -1,0 +1,17 @@
+protocol = "my-daemon"
+doc = ""
+traits = ["is-daemon"]
+
+[links]
+source = "https://github.com/yaq-project/hart-protocol"
+bugtracker = "https://github.com/yaq-project/hart-protocol/-/issues"
+
+[installation]
+PyPI = "https://pypi.org/project/hart-protocol"
+
+[config]
+
+[state]
+
+[messages]
+

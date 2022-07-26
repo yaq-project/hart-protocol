@@ -1,0 +1,53 @@
+# byte-compiled
+__pycache__/
+*.py[cod]
+
+# direnv
+*.envrc
+
+# distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+temp/
+*.egg-info/
+.installed.cfg
+*.egg
+*.p
+
+# emacs
+flycheck_*.el
+.projectile
+*.#*
+
+# images
+*.jpg
+*.gif
+*.png
+!logo/logo.png
+*.svg
+*.ico
+
+# mypy
+*.mypy_cache/
+
+# tests / coverage reports
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*,cover
+.pytest_cache/*
+
+# vim
+*.sw?
