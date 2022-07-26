@@ -5,11 +5,11 @@ build-backend = "flit_core.buildapi"
 [tool.flit.metadata]
 module = "hart_protocol"
 dist-name = "hart-protocol"
-author = "yaq developers"
-home-page = "https://yaq.fyi"
+author = "Blaise Thompson"
+home-page = "https://github.com/yaq-project/hart-protocol"
 description-file = "README.md"
 requires-python = ">=3.7"
-requires = ["yaqd-core>=2020.06.3"]
+requires = []
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",
@@ -18,6 +18,8 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Topic :: Scientific/Engineering",
 ]
 
@@ -27,10 +29,6 @@ Issues = "https://github.com/yaq-project/hart-protocol/issues"
 
 [tool.flit.metadata.requires-extra]
 dev = ["black", "pre-commit"]
-
-[tool.flit.scripts]
-yaqd-my-daemon = "hart_protocol._my_daemon:MyDaemon.main"
-
 
 [tool.black]
 line-length = 99
