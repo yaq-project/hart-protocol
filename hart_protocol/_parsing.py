@@ -1,9 +1,9 @@
-from collections import namedtuple
+import struct
 
 
 
 
-def parse(response: bytes) -> namedtuple:
+def parse(response: bytes) -> dict:
     out = dict()
     out["full_response"]: bytes = response
     if response[0] & 0x80:  # long address
@@ -12,9 +12,8 @@ def parse(response: bytes) -> namedtuple:
     else:  # short address
         out["address"]: bytes = response[1]
         response = response[2:]
-    command = response[0]
-    bytecount = response[1]
-    out["status"] = response[2:4]
+    command, bytecount, status = struct.unpack_from(">BBL", response)
+    out["status"] = status
     data = response[4:4+bytecount]
     out["command"]: int = command
     out["command_name"]: str = f"hart_command_{command}"
@@ -30,4 +29,7 @@ def parse(response: bytes) -> namedtuple:
         out["software_revision_level"]: bytes = data[6]
         out["hardware_revision_level"]: bytes = data[7]
         out["device_id"]: bytes = data[9:12]
+    if command in [1]:
+        out["command_name"] = "read_primary_variable"
+        out["primary_variable"] = struct.unpack_from(">f", data)
     return out
