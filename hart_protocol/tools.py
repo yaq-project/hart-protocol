@@ -40,7 +40,7 @@ def pack_ascii(string: Union[str, bytes]) -> bytes:
     if type(string) == str:
         chars = [c.encode() for c in string]  # type: ignore
     else:
-        chars = [c for c in string]
+        chars = [c for c in string]  # type: ignore
     out = 0
     for i, c in zip(range(8), [ord(c) & 0b0011_1111 for c in chars][::-1]):
         out |= c << (i * 6)
