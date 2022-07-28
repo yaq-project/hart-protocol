@@ -1,4 +1,5 @@
 import math
+from typing import Union
 
 
 def calculate_checksum(command: bytes) -> bytes:
@@ -35,11 +36,12 @@ def pack_command(address, command_id, data=None):
     return command
 
 
-def pack_ascii(string: str) -> bytes:
-    chars = [c.encode() for c in string]
-    chars = [ord(c) & 0b0011_1111 for c in chars]
+def pack_ascii(string: Union[str, bytes]) -> bytes:
+    if type(string) == str:
+        chars = [c.encode() for c in string]  # type: ignore
+    else:
+        chars = [c for c in string]  # type: ignore
     out = 0
-    for i, c in zip(range(8), chars[::-1]):
+    for i, c in zip(range(8), [ord(c) & 0b0011_1111 for c in chars][::-1]):
         out |= c << (i * 6)
-    out = out.to_bytes(math.ceil((len(string) * 6) / 8), "big")
-    return out
+    return out.to_bytes(math.ceil((len(string) * 6) / 8), "big")
