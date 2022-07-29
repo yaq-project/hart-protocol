@@ -80,23 +80,23 @@ class Unpacker:
         while len(self.buf) < l:
             self.buf += self._file.read(1)
         # now we can use the bytecount to read through the data and checksum
-        bytecount = self.buf[l-3]
+        bytecount = self.buf[l - 3]
         response_length = l + bytecount - 1
         while len(self.buf) < response_length:
             self.buf += self._file.read(1)
         # checksum
-        checksum = int.from_bytes(tools.calculate_checksum(self.buf[:response_length-1]), "big")
-        if checksum != self.buf[response_length-1]:
+        checksum = int.from_bytes(tools.calculate_checksum(self.buf[: response_length - 1]), "big")
+        if checksum != self.buf[response_length - 1]:
             self._decoding_error("Invalid checksum.")
             raise StopIteration
         # parse
-        response = self.buf[:response_length+1]
+        response = self.buf[: response_length + 1]
         dict_ = parse(response)
         # clear buffer
         if len(self.buf) == response_length:
             self.buf = b""
         else:
-            self.buf = self.buf[response_length+1:]
+            self.buf = self.buf[response_length + 1 :]
         # return
         return namedtuple(dict_["command_name"], dict_.keys())(**dict_)
 
