@@ -6,7 +6,7 @@ def calculate_checksum(command: Union[int, bytes]) -> bytes:
     if type(command) == int:
         command = command.to_bytes(64, "big")  # type: ignore
     lrc = 0
-    for byte in command:
+    for byte in command:  # type: ignore
         lrc ^= byte
     out = lrc.to_bytes(1, "big")
     return out
