@@ -80,11 +80,76 @@ command = hart_protocol.pack_command(address=123, command_id=236, data=data)
 
 ## Parsing Responses
 
-Documentation TODO
+All responses are parsed into named tuples.
+Every single response will have the following keys.
+
+Generic Response
+| key             | value     |
+| --------------- | --------- |
+| `address`       | `<int>`   |
+| `bytecount`     | `<int>`   |
+| `command`       | `<int>`   |
+| `command_name`  | `<str>`   |
+| `data`          | `<bytes>` |
+| `full_response` | `<bytes>` |
+| `status`        | `<int>`   |
+
+You can parse the raw `data` according to the particulars of your peripheral.
+Certain standard responses are parsed further as shown below.
+
+Response 0
+| key                                           | value                      |
+| --------------------------------------------- | -------------------------- |
+| `command_name`                                | `"read_unique_identifier"` |
+| `command`                                     | `0`                        |
+| `device_id`                                   | `<bytes>`                  |
+| `hardware_revision_level`                     | `<int>`                    |
+| `manufacturer_device_type`                    | `<bytes>`                  |
+| `manufacturer_id`                             | `<int>`                    |
+| `number_response_preamble_charachters`        | `<int>`                    |
+| `software_revision_level`                     | `<int>`                    |
+| `transmitter_specific_command_revision_level` | `<int>`                    |
+| `universal_command_revision_level             | `<int>`                    |
+
+Response 1
+| key                | value                     |
+| ------------------ | ------------------------- |
+| `command_name`     | `"read_primary_variable"` |
+| `command`          | `1`                       |
+| `primary_variable` | `<float>`                 |
+
+Response 11
+| key                                           | value                      |
+| --------------------------------------------- | -------------------------- |
+| `command_name`                                | `"read_unique_identifier"` |
+| `command`                                     | `11`                       |
+| `device_id`                                   | `<bytes>`                  |
+| `hardware_revision_level`                     | `<int>`                    |
+| `manufacturer_device_type`                    | `<bytes>`                  |
+| `manufacturer_id`                             | `<int>`                    |
+| `number_response_preamble_charachters`        | `<int>`                    |
+| `software_revision_level`                     | `<int>`                    |
+| `transmitter_specific_command_revision_level` | `<int>`                    |
+| `universal_command_revision_level             | `<int>`                    |
 
 ## Integration Example
 
-Documentation TODO
+```python
+>>> import hart_protocol
+>>> import serial
+>>>
+>>> port = serial.Serial("/dev/ttyUSB0", 19200, timeout=0.1)
+>>> port.parity = "O"
+>>> port.stopbits = 1
+>>> tag = hart_protocol.tools.pack_ascii("06C22300517"[-8:])
+>>> port.write(hart_protocol.universal.read_unique_identifier_associated_with_tag(tag))
+>>>
+>>> unpacker = apt.Unpacker(port)
+>>> for msg in unpacker:
+...     print(msg)
+...
+>>>
+```
 
 ## Maintainers
 
