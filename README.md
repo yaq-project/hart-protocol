@@ -84,7 +84,22 @@ Documentation TODO
 
 ## Integration Example
 
-Documentation TODO
+```python
+>>> import hart_protocol
+>>> import serial
+>>>
+>>> port = serial.Serial("/dev/ttyUSB0", 19200, timeout=0.1)
+>>> port.parity = "O"
+>>> port.stopbits = 1
+>>> tag = hart_protocol.tools.pack_ascii("06C22300517"[-8:])
+>>> port.write(hart_protocol.universal.read_unique_identifier_associated_with_tag(tag))
+>>>
+>>> unpacker = apt.Unpacker(port)
+>>> for msg in unpacker:
+...     print(msg)
+...
+>>>
+```
 
 ## Maintainers
 

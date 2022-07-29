@@ -2,7 +2,9 @@ import math
 from typing import Union
 
 
-def calculate_checksum(command: bytes) -> bytes:
+def calculate_checksum(command: Union[int, bytes]) -> bytes:
+    if type(command) == int:
+        command = command.to_bytes(64, "big")  # type: ignore
     lrc = 0
     for byte in command:
         lrc ^= byte
@@ -32,7 +34,6 @@ def pack_command(address, command_id, data=None):
         command += len(data).to_bytes(1, "big")  # byte count
         command += data  # data
     command += calculate_checksum(command[5:])
-    print(command)
     return command
 
 
