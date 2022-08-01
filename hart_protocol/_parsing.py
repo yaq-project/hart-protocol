@@ -18,8 +18,8 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     out["command_name"] = f"hart_command_{command}"
     out["bytecount"] = bytecount
     out["data"] = data
-    
-    #UNIVERSAL COMMANDS
+
+    # UNIVERSAL COMMANDS
     if command in [0, 11]:
         out["command_name"] = "read_unique_identifier"
         out["manufacturer_id"] = data[1]
@@ -42,17 +42,23 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["primary_variable"] = primary_variable
     elif command in [3]:
         out["command_name"] = "read_dynamic_variables_and_loop_current"
-        analog_signal, primary_variable_units, primary_variable, secondary_variable_units, secondary_variable  = struct.unpack_from(">fBfBf", data)
-        out["analog_signal"] = analog_signal 
+        (
+            analog_signal,
+            primary_variable_units,
+            primary_variable,
+            secondary_variable_units,
+            secondary_variable,
+        ) = struct.unpack_from(">fBfBf", data)
+        out["analog_signal"] = analog_signal
         out["primary_variable_units"] = primary_variable_units
         out["primary_variable"] = primary_variable
         out["secondary_variable_units"] = secondary_variable_units
         out["secondary_variable"] = secondary_variable
-    elif command in [6]: #What is "new_short_address" input
+    elif command in [6]:  # What is "new_short_address" input
         out["command_name"] = "write_polling_address"
-        polling_address = struct.unpack_from(">B", data) 
+        polling_address = struct.unpack_from(">B", data)
         out["polling_address"] = polling_address
-    elif command in [12]: #Done/tested
+    elif command in [12]:  # Done/tested
         out["command_name"] = "read_message"
         out["message"] = data[0:23]
     elif command in [13]:
@@ -63,91 +69,115 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     elif command in [14]:
         out["command_name"] = "read_primary_variable_information"
         out["serial_no"] = data[0:2]
-        sensor_limits_code, upper_limit, lower_limit, min_span = struct.unpack_from(">xxxBfff", data)
+        sensor_limits_code, upper_limit, lower_limit, min_span = struct.unpack_from(
+            ">xxxBfff", data
+        )
         out["sensor_limits_code"] = sensor_limits_code
         out["upper_limit"] = upper_limit
         out["lower_limit"] = lower_limit
         out["min_span"] = min_span
     elif command in [15]:
         out["command_name"] = "read_output_information"
-        alarm_code, transfer_fn_code, primary_variable_range_code, upper_range_value, lower_range_value, damping_value, write_protect, private_label  = struct.unpack_from(">BBBfffBB", data)
+        (
+            alarm_code,
+            transfer_fn_code,
+            primary_variable_range_code,
+            upper_range_value,
+            lower_range_value,
+            damping_value,
+            write_protect,
+            private_label,
+        ) = struct.unpack_from(">BBBfffBB", data)
         out["alarm_code"] = alarm_code
-        out["transfer_fn_code"] = transfer_fn_code 
+        out["transfer_fn_code"] = transfer_fn_code
         out["primary_variable_range_code"] = primary_variable_range_code
         out["upper_range_value"] = upper_range_value
         out["lower_range_value"] = lower_range_value
         out["damping_value"] = damping_value
-        out["write_protect"] = write_protect #Apparently unused
+        out["write_protect"] = write_protect  # Apparently unused
         out["private_label"] = private_label
-    elif command in [16]: 
+    elif command in [16]:
         out["command_name"] = "read_final_assembly_number"
-        out["final_assembly_no"] = int.from_bytes(data[0:2], "big") 
-    elif command in [17]: 
+        out["final_assembly_no"] = int.from_bytes(data[0:2], "big")
+    elif command in [17]:
         out["command_name"] = "write_message"
         out["message"] = data[0:23]
-    elif command in [18]: #Done - not sure what date format is
+    elif command in [18]:  # Done - not sure what date format is
         out["command_name"] = "write_tag_descriptor_date"
         out["device_tag_name"] = data[0:5]
         out["device_descriptor"] = data[6:17]
         out["date"] = data[18:20]
     elif command in [19]:
         out["command_name"] = "write_final_assembly_number"
-        out["final_assembly_no"] = int.from_bytes(data[0:2], "big") 
+        out["final_assembly_no"] = int.from_bytes(data[0:2], "big")
 
-    #COMMON COMMANDS
+    # COMMON COMMANDS
 
     # elif command in [37]:
     #     out["command_name"] = "set_primary_variable_lower_range_value"
-    #     out[""] = 
+    #     out[""] =
     # request data bytes = NONE, response data bytes = NONE
-    
+
     # elif command in [38]:
     #     out["command_name"] = "reset_configuration_changed_flag"
-    #     out[""] = 
+    #     out[""] =
     # request data bytes = NONE, response data bytes = NONE
 
     # elif command in [42]:
     #     out["command_name"] = "perform_master_reset"
-    #     out[""] = 
+    #     out[""] =
     # request data bytes = NONE, response data bytes = NONE
 
     # elif command in [48]:
     #     out["command_name"] = "read_additional_transmitter_status"
-    #     out[""] = 
+    #     out[""] =
     # request data bytes = NONE, response data bytes = NONE
 
     elif command in [50]:
         out["command_name"] = "read_dynamic_variable_assignments"
-        primary_transmitter_variable, secondary_transmitter_variable, tertiary_transmitter_variable, quaternary_transmitter_variable = struct.unpack_from(">BBBB", data)
+        (
+            primary_transmitter_variable,
+            secondary_transmitter_variable,
+            tertiary_transmitter_variable,
+            quaternary_transmitter_variable,
+        ) = struct.unpack_from(">BBBB", data)
         out["primary_transmitter_variable"] = primary_transmitter_variable
         out["secondary_transmitter_variable"] = secondary_transmitter_variable
-        out["tertiary_transmitter_variable"] = tertiary_transmitter_variable #NOT USED
-        out["quaternary_transmitter_variable"] = quaternary_transmitter_variable # NOT USED
+        out["tertiary_transmitter_variable"] = tertiary_transmitter_variable  # NOT USED
+        out["quaternary_transmitter_variable"] = quaternary_transmitter_variable  # NOT USED
     elif command in [59]:
         out["command_name"] = "write_number_of_response_preambles"
-        n_response_preambles = struct.unpack_from(">B", data) 
+        n_response_preambles = struct.unpack_from(">B", data)
         out["n_response_preambles"] = n_response_preambles
     elif command in [66]:
         out["command_name"] = "toggle_analog_output_mode"
-        analog_output_selection, analog_output_units_code, fixed_analog_output = struct.unpack_from(">BBf", data) 
+        (
+            analog_output_selection,
+            analog_output_units_code,
+            fixed_analog_output,
+        ) = struct.unpack_from(">BBf", data)
         out["analog_output_selection"] = analog_output_selection
         out["analog_output_units_code"] = analog_output_units_code
         out["fixed_analog_output"] = fixed_analog_output
     elif command in [67]:
         out["command_name"] = "trim_analog_output_zero"
-        analog_output_code, analog_output_units_code, measured_analog_output = struct.unpack_from(">BBf", data) 
+        analog_output_code, analog_output_units_code, measured_analog_output = struct.unpack_from(
+            ">BBf", data
+        )
         out["analog_output_code"] = analog_output_code
         out["analog_output_units_code"] = analog_output_units_code
         out["measured_analog_output"] = measured_analog_output
     elif command in [68]:
         out["command_name"] = "trim_analog_output_span"
-        analog_output_code, analog_output_units_code, measured_analog_output = struct.unpack_from(">BBf", data) 
+        analog_output_code, analog_output_units_code, measured_analog_output = struct.unpack_from(
+            ">BBf", data
+        )
         out["analog_output_code"] = analog_output_code
         out["analog_output_units_code"] = analog_output_units_code
         out["measured_analog_output"] = measured_analog_output
     elif command in [123]:
         out["command_name"] = "select_baud_rate"
-        baud_rate = struct.unpack_from(">B", data) 
+        baud_rate = struct.unpack_from(">B", data)
         out["baud_rate"] = baud_rate
 
     return out
