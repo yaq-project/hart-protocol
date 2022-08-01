@@ -63,7 +63,6 @@ def write_tag_descriptor_date(address: bytes, tag: str, descriptor: str, date: t
     data += year.to_bytes(1, "big")
     return tools.pack_command(address, command_id=18, data=data)
 
-
 def write_final_assembly_number(address: bytes, number: int):
     data = number.to_bytes(3, "big")
     return tools.pack_command(address, command_id=19, data=data)
