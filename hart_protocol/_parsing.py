@@ -18,8 +18,8 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     out["command_name"] = f"hart_command_{command}"
     out["bytecount"] = bytecount
     out["data"] = data
-    
-    #UNIVERSAL COMMANDS
+
+    # universal commands
     if command in [0, 11]:
         out["command_name"] = "read_unique_identifier"
         out["manufacturer_id"] = data[1]
@@ -48,11 +48,11 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["primary_variable"] = primary_variable
         out["secondary_variable_units"] = secondary_variable_units
         out["secondary_variable"] = secondary_variable
-    elif command in [6]: #What is "new_short_address" input
+    elif command in [6]:
         out["command_name"] = "write_polling_address"
-        polling_address = struct.unpack_from(">B", data) 
+        polling_address = struct.unpack_from(">B", data)[0]
         out["polling_address"] = polling_address
-    elif command in [12]: #Done/tested
+    elif command in [12]: 
         out["command_name"] = "read_message"
         out["message"] = data[0:23]
     elif command in [13]:
@@ -77,7 +77,7 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["upper_range_value"] = upper_range_value
         out["lower_range_value"] = lower_range_value
         out["damping_value"] = damping_value
-        out["write_protect"] = write_protect #Apparently unused
+        out["write_protect"] = write_protect
         out["private_label"] = private_label
     elif command in [16]: 
         out["command_name"] = "read_final_assembly_number"
@@ -85,7 +85,7 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     elif command in [17]: 
         out["command_name"] = "write_message"
         out["message"] = data[0:23]
-    elif command in [18]: #Done - not sure what date format is
+    elif command in [18]:
         out["command_name"] = "write_tag_descriptor_date"
         out["device_tag_name"] = data[0:5]
         out["device_descriptor"] = data[6:17]
@@ -125,7 +125,7 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["quaternary_transmitter_variable"] = quaternary_transmitter_variable # NOT USED
     elif command in [59]:
         out["command_name"] = "write_number_of_response_preambles"
-        n_response_preambles = struct.unpack_from(">B", data) 
+        n_response_preambles = struct.unpack_from(">B", data)[0]
         out["n_response_preambles"] = n_response_preambles
     elif command in [66]:
         out["command_name"] = "toggle_analog_output_mode"
@@ -147,7 +147,6 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["measured_analog_output"] = measured_analog_output
     elif command in [123]:
         out["command_name"] = "select_baud_rate"
-        baud_rate = struct.unpack_from(">B", data) 
-        out["baud_rate"] = baud_rate
+        out["baud_rate"] = int.from_bytes(data, "big")
 
     return out
