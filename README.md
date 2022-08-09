@@ -144,7 +144,7 @@ Response 11
 >>> tag = hart_protocol.tools.pack_ascii("06C22300517"[-8:])
 >>> port.write(hart_protocol.universal.read_unique_identifier_associated_with_tag(tag))
 >>>
->>> unpacker = apt.Unpacker(port)
+>>> unpacker = hart_protocol.Unpacker(port)
 >>> for msg in unpacker:
 ...     print(msg)
 ...
