@@ -52,18 +52,24 @@ class Unpacker:
         # Discard first byte of buffer, it might decode better now...
         self.buf = self.buf[1:]
 
+    def _read_one_byte_if_possible(self):
+        if self._file.in_waiting > 0:
+            return self._file.read(1)
+        else:
+            raise StopIteration
+
     def __next__(self):
         # must work with at least two bytes to start with
         while len(self.buf) < 2:
-            self.buf += self._file.read(1)
+            self.buf += self._read_one_byte_if_possible()
         # keep reading until we find a minimum preamble
         while self.buf[:2] != b"\xFF\xFF":
-            self.buf += self._file.read(1)
+            self.buf += self._read_one_byte_if_possible()
             self._decoding_error("Head of buffer not recognized as valid preamble")
         # now we are within the preamble, seek forward for start charachter
         while True:
             if len(self.buf) < 2:
-                self.buf += self._file.read(1)
+                self.buf += self._read_one_byte_if_possible()
             if self.buf[0] == 0xFF:
                 self.buf = self.buf[1:]
             elif self.buf[0] in [0x06, 0x86]:
@@ -78,12 +84,12 @@ class Unpacker:
         else:
             l = 6
         while len(self.buf) < l:
-            self.buf += self._file.read(1)
+            self.buf += self._read_one_byte_if_possible()
         # now we can use the bytecount to read through the data and checksum
         bytecount = self.buf[l - 3]
         response_length = l + bytecount - 1
         while len(self.buf) < response_length:
-            self.buf += self._file.read(1)
+            self.buf += self._read_one_byte_if_possible()
         # checksum
         checksum = int.from_bytes(tools.calculate_checksum(self.buf[: response_length - 1]), "big")
         if checksum != self.buf[response_length - 1]:
