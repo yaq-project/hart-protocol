@@ -57,7 +57,7 @@ class Unpacker:
             raise StopIteration
 
     def __next__(self):
-        print('next', self.buf)
+        print("next", self.buf)
         # must work with at least two bytes to start with
         while len(self.buf) < 3:
             self.buf += self._read_one_byte_if_possible()
@@ -80,7 +80,9 @@ class Unpacker:
         while len(self.buf) < response_length:
             self.buf += self._read_one_byte_if_possible()
         # checksum
-        checksum = int.from_bytes(tools.calculate_checksum(self.buf[2:response_length-1]), "big")
+        checksum = int.from_bytes(
+            tools.calculate_checksum(self.buf[2 : response_length - 1]), "big"
+        )
         if checksum != self.buf[response_length - 1]:
             self._decoding_error("Invalid checksum.")
             raise StopIteration
