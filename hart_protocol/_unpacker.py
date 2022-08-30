@@ -49,8 +49,6 @@ class Unpacker:
             raise RuntimeError(message)
         if self.on_error == "warn":
             warnings.warn(message)
-        # Discard first byte of buffer, it might decode better now...
-        self.buf = self.buf[1:]
 
     def _read_one_byte_if_possible(self):
         if self._file.in_waiting > 0:
@@ -59,30 +57,21 @@ class Unpacker:
             raise StopIteration
 
     def __next__(self):
+        print("next", self.buf)
         # must work with at least two bytes to start with
-        while len(self.buf) < 2:
+        while len(self.buf) < 3:
             self.buf += self._read_one_byte_if_possible()
         # keep reading until we find a minimum preamble
-        while self.buf[:2] != b"\xFF\xFF":
+        while self.buf[:3] not in [b"\xFF\xFF\x06", b"\xFF\xFF\x86"]:
             self.buf += self._read_one_byte_if_possible()
+            self.buf = self.buf[1:]
             self._decoding_error("Head of buffer not recognized as valid preamble")
-        # now we are within the preamble, seek forward for start charachter
-        while True:
-            if len(self.buf) < 2:
-                self.buf += self._read_one_byte_if_possible()
-            if self.buf[0] == 0xFF:
-                self.buf = self.buf[1:]
-            elif self.buf[0] in [0x06, 0x86]:
-                break
-            else:
-                self._decoding_error("Preamble did not end with start charachter.")
-                raise StopIteration
-        # now the head of our buffer is the start charachter
+        # now the head of our buffer is the start charachter plus two preamble
         # we will read all the way through status
-        if self.buf[0] & 0x80:
-            l = 10
+        if self.buf[2] & 0x80:
+            l = 12
         else:
-            l = 6
+            l = 8
         while len(self.buf) < l:
             self.buf += self._read_one_byte_if_possible()
         # now we can use the bytecount to read through the data and checksum
@@ -91,19 +80,22 @@ class Unpacker:
         while len(self.buf) < response_length:
             self.buf += self._read_one_byte_if_possible()
         # checksum
-        checksum = int.from_bytes(tools.calculate_checksum(self.buf[: response_length - 1]), "big")
+        checksum = int.from_bytes(
+            tools.calculate_checksum(self.buf[2 : response_length - 1]), "big"
+        )
         if checksum != self.buf[response_length - 1]:
             self._decoding_error("Invalid checksum.")
             raise StopIteration
         # parse
-        response = self.buf[: response_length + 1]
+        response = self.buf[2:response_length]
         dict_ = parse(response)
         # clear buffer
         if len(self.buf) == response_length:
             self.buf = b""
         else:
-            self.buf = self.buf[response_length + 1 :]
+            self.buf = self.buf[response_length + 3 :]
         # return
+        print(dict_)
         return namedtuple(dict_["command_name"], dict_.keys())(**dict_)
 
     def __aiter__(self):
