@@ -57,7 +57,6 @@ class Unpacker:
             raise StopIteration
 
     def __next__(self):
-        print("next", self.buf)
         # must work with at least two bytes to start with
         while len(self.buf) < 3:
             self.buf += self._read_one_byte_if_possible()
@@ -95,7 +94,6 @@ class Unpacker:
         else:
             self.buf = self.buf[response_length + 3 :]
         # return
-        print(dict_)
         return namedtuple(dict_["command_name"], dict_.keys())(**dict_)
 
     def __aiter__(self):
