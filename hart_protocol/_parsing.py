@@ -18,9 +18,9 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     out["command_name"] = f"hart_command_{command}"
     out["bytecount"] = bytecount
     out["data"] = data
-    
+
     # handle error return
-    if bytecount==2:
+    if bytecount == 2:
         return out
 
     # universal commands
