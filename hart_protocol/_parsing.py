@@ -11,13 +11,17 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
     else:  # short address
         out["address"] = response[1]
         response = response[2:]
-    command, bytecount, status = struct.unpack_from(">BBL", response)
+    command, bytecount, status = struct.unpack_from(">BBH", response)
     out["status"] = status
     data = response[4 : 4 + bytecount]
     out["command"] = command
     out["command_name"] = f"hart_command_{command}"
     out["bytecount"] = bytecount
     out["data"] = data
+    
+    # handle error return
+    if bytecount==2:
+        return out
 
     # universal commands
     if command in [0, 11]:
