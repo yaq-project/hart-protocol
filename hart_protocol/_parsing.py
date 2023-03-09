@@ -12,7 +12,8 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["address"] = response[1]
         response = response[2:]
     command, bytecount, response_code, device_status = struct.unpack_from(">BBBB", response)
-    out["status"] = status
+    out["device_status"] = device_status
+    out["response_code"] = response_code
     data = response[4 : 4 + bytecount]
     out["command"] = command
     out["command_name"] = f"hart_command_{command}"
