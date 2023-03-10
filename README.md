@@ -93,7 +93,7 @@ Generic Response
 | `data`          | `<bytes>` |
 | `full_response` | `<bytes>` |
 | `device_status` | `<bytes>` |
-| `response_code` | `<bytes>` | 
+| `response_code` | `<bytes>` |
 
 You can parse the raw `data` according to the particulars of your peripheral.
 Certain standard responses are parsed further as shown below.
