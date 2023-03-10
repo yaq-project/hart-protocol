@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- in responses, device_status and response_code are now unpacked as two separate bytes
+- data with bytecount of 2 has status only, and now returns immediately
+
 ## [2022.8.2]
 
 ### Fixed
