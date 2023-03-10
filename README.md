@@ -92,7 +92,8 @@ Generic Response
 | `command_name`  | `<str>`   |
 | `data`          | `<bytes>` |
 | `full_response` | `<bytes>` |
-| `status`        | `<int>`   |
+| `device_status` | `<bytes>` |
+| `response_code` | `<bytes>` |
 
 You can parse the raw `data` according to the particulars of your peripheral.
 Certain standard responses are parsed further as shown below.
@@ -109,7 +110,7 @@ Response 0
 | `number_response_preamble_charachters`        | `<int>`                    |
 | `software_revision_level`                     | `<int>`                    |
 | `transmitter_specific_command_revision_level` | `<int>`                    |
-| `universal_command_revision_level             | `<int>`                    |
+| `universal_command_revision_level`            | `<int>`                    |
 
 Response 1
 | key                | value                     |
@@ -130,7 +131,9 @@ Response 11
 | `number_response_preamble_charachters`        | `<int>`                    |
 | `software_revision_level`                     | `<int>`                    |
 | `transmitter_specific_command_revision_level` | `<int>`                    |
-| `universal_command_revision_level             | `<int>`                    |
+| `universal_command_revision_level`            | `<int>`                    |
+
+Many other universal and common responses are also parsed..., give it a try!
 
 ## Integration Example
 
