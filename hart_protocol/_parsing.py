@@ -68,12 +68,12 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["message"] = data[0:24]
     elif command in [13]:
         out["command_name"] = "read_tag_descriptor_date"
-        out["device_tag_name"] = data[0:5]
-        out["device_descriptor"] = data[6:17]
-        out["date"] = data[18:20]
+        out["device_tag_name"] = data[0:6]
+        out["device_descriptor"] = data[6:18]
+        out["date"] = data[18:21]
     elif command in [14]:
         out["command_name"] = "read_primary_variable_information"
-        out["serial_no"] = data[0:2]
+        out["serial_no"] = data[0:3]
         sensor_limits_code, upper_limit, lower_limit, min_span = struct.unpack_from(
             ">xxxBfff", data
         )
@@ -106,12 +106,12 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["final_assembly_no"] = int.from_bytes(data[0:2], "big")
     elif command in [17]:
         out["command_name"] = "write_message"
-        out["message"] = data[0:23]
+        out["message"] = data[0:24]
     elif command in [18]:
         out["command_name"] = "write_tag_descriptor_date"
-        out["device_tag_name"] = data[0:5]
-        out["device_descriptor"] = data[6:17]
-        out["date"] = data[18:20]
+        out["device_tag_name"] = data[0:6]
+        out["device_descriptor"] = data[6:18]
+        out["date"] = data[18:21]
     elif command in [19]:
         out["command_name"] = "write_final_assembly_number"
         out["final_assembly_no"] = int.from_bytes(data[0:2], "big")
