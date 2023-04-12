@@ -65,7 +65,7 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["polling_address"] = polling_address
     elif command in [12]:
         out["command_name"] = "read_message"
-        out["message"] = data[0:23]
+        out["message"] = data[0:24]
     elif command in [13]:
         out["command_name"] = "read_tag_descriptor_date"
         out["device_tag_name"] = data[0:5]
