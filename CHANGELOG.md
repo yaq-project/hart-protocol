@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2023.4.0]
+
+### Fixed
+- missing final byte from messages 12, 13, 14, 17, 18
+
 ## [2023.3.0]
 
 ### Changed
@@ -26,7 +31,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/hart-protocol/compare/v2023.3.0...main
+[Unreleased]: https://github.com/yaq-project/hart-protocol/compare/v2023.4.0...main
+[2023.4.0]: https://github.com/yaq-project/hart-protocol/compare/v2023.3.0...v2023.4.0
 [2023.3.0]: https://github.com/yaq-project/hart-protocol/compare/v2022.8.2...v2023.3.0
 [2022.8.2]: https://github.com/yaq-project/hart-protocol/compare/v2022.8.1...v2022.8.2
 [2022.8.1]: https://github.com/yaq-project/hart-protocol/compare/v2022.8.0...v2022.8.1
