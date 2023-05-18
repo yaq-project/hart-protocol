@@ -103,7 +103,7 @@ def parse(response: bytes) -> MutableMapping[str, Union[int, bytes, str, float]]
         out["private_label"] = private_label
     elif command in [16]:
         out["command_name"] = "read_final_assembly_number"
-        out["final_assembly_no"] = int.from_bytes(data[0:2], "big")
+        out["final_assembly_no"] = int.from_bytes(data[0:3], "big")
     elif command in [17]:
         out["command_name"] = "write_message"
         out["message"] = data[0:24]
