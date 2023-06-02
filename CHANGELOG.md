@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [2023.6.0
+
+### Fixed
+- VERSION is now a python file so that it can be recognized by pyinstaller
+
 ## [2023.5.0]
 
 ### Fixed
