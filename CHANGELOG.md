@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-## [2023.6.0
+## [2023.6.0]
 
 ### Fixed
 - VERSION is now a python file so that it can be recognized by pyinstaller
@@ -41,7 +41,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - initial release
 
-[Unreleased]: https://github.com/yaq-project/hart-protocol/compare/v2023.5.0...main
+[Unreleased]: https://github.com/yaq-project/hart-protocol/compare/v2023.6.0...main
+[2023.6.0]: https://github.com/yaq-project/hart-protocol/compare/v2023.5.0...v2023.6.0
 [2023.5.0]: https://github.com/yaq-project/hart-protocol/compare/v2023.4.0...v2023.5.0
 [2023.4.0]: https://github.com/yaq-project/hart-protocol/compare/v2023.3.0...v2023.4.0
 [2023.3.0]: https://github.com/yaq-project/hart-protocol/compare/v2022.8.2...v2023.3.0
