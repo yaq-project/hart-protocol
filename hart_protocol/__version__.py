@@ -1,6 +1,5 @@
 """Define version."""
 
-
 import pathlib
 import subprocess
 from .VERSION import __version__
