@@ -4,7 +4,6 @@ import pathlib
 import subprocess
 from .VERSION import __version__
 
-
 here = pathlib.Path(__file__).resolve().parent
 
 

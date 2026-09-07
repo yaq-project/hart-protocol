@@ -61,7 +61,7 @@ class Unpacker:
         while len(self.buf) < 3:
             self.buf += self._read_one_byte_if_possible()
         # keep reading until we find a minimum preamble
-        while self.buf[:3] not in [b"\xFF\xFF\x06", b"\xFF\xFF\x86"]:
+        while self.buf[:3] not in [b"\xff\xff\x06", b"\xff\xff\x86"]:
             self.buf += self._read_one_byte_if_possible()
             self.buf = self.buf[1:]
             self._decoding_error("Head of buffer not recognized as valid preamble")
