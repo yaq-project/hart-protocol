@@ -24,7 +24,7 @@ def pack_command(address, command_id, data=None):
         address = int.from_bytes(address, "big")
     if type(command_id) == int:
         command_id = command_id.to_bytes(1, "big")
-    command = b"\xFF\xFF\xFF\xFF\xFF"  # preamble
+    command = b"\xff\xff\xff\xff\xff"  # preamble
     command += b"\x82"  # start charachter
     command += (549755813888 | address).to_bytes(5, "big")
     command += command_id
